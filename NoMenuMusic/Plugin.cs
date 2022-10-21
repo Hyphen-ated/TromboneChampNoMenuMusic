@@ -28,5 +28,38 @@ namespace NoMenuMusic
             harmony.PatchAll();
 
         }
+
+        [HarmonyPatch(typeof(HomeController), "Start")]
+        internal class HomeControllerStartPatch
+        {
+            static void Postfix(HomeController __instance)
+            {
+                Plugin.Instance.Logger.LogInfo("Muting main menu music");
+                __instance.musobj.Stop();
+            }
+        }
+
+        [HarmonyPatch(typeof(LevelSelectController), "Start")]
+        internal class LevelSelectControllerStartPatch
+        {
+            static void Postfix(LevelSelectController __instance)
+            {
+                Plugin.Instance.Logger.LogInfo("Muting song select menu music");
+                __instance.bgmus.Stop();
+            }
+        }
+
+        [HarmonyPatch(typeof(CharSelectController), "Start")]
+        internal class CharSelectControllerStartPatch
+        {
+            static void Postfix(CharSelectController __instance)
+            {
+                Plugin.Instance.Logger.LogInfo("Muting char select menu music");
+                AudioSource mus_obj = __instance.GetFieldValue<AudioSource>("mus_obj");
+                mus_obj.Stop();
+            }
+        }
+
+        
     }
 }
